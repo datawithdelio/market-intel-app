@@ -1,0 +1,27 @@
+# OS
+.DS_Store
+
+# Node / frontend
+node_modules/
+.next/
+dist/
+build/
+
+# Python / backend
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# Env files
+.env
+.env.local
+
+# Logs
+logs/
+*.log
+
+# Editor
+.vscode/
+.idea/
+
