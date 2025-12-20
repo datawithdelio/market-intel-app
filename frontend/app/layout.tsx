@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Sidebar from "../components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,6 @@ export default function RootLayout({
           minHeight: "100vh",
         }}
       >
-        {/* Top Header */}
         <header
           style={{
             padding: "16px 24px",
@@ -45,10 +45,11 @@ export default function RootLayout({
           Market Intel
         </header>
 
-        {/* Page Content */}
-        <main style={{ padding: "24px" }}>
-          {children}
-        </main>
+        {/* SIDEBAR + PAGE CONTENT */}
+        <div style={{ display: "flex", minHeight: "calc(100vh - 64px)" }}>
+          <Sidebar />
+          <main style={{ padding: "24px", flex: 1 }}>{children}</main>
+        </div>
       </body>
     </html>
   );
