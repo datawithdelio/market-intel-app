@@ -10,9 +10,9 @@
   --text-muted: rgba(20, 20, 37, 0.65);
   --text-on-dark: #e9e9f2;
 
-  /* Surfaces (glass cards) */
-  --card: rgba(255, 255, 255, 0.68);
-  --card-strong: rgba(255, 255, 255, 0.78);
+  /* ✅ FIX #1: lighter glass cards */
+  --card: rgba(255, 255, 255, 0.82);
+  --card-strong: rgba(255, 255, 255, 0.9);
   --stroke: rgba(255, 255, 255, 0.35);
 
   /* Shadows / radius */
@@ -22,6 +22,7 @@
   /* Accent */
   --blue: #5b6cff;
   --blue-2: #7c8bff;
+  --orange: #ff8a4c;
 }
 
 html,
@@ -41,7 +42,7 @@ body {
     linear-gradient(180deg, #0b0b12 0%, #0b0b12 100%);
 }
 
-/* A reusable “glass” surface you can use on cards/panels */
+/* Glass surfaces */
 .glass {
   background: var(--card);
   border: 1px solid var(--stroke);
@@ -66,7 +67,15 @@ body {
   color: var(--text-muted);
 }
 
-/* Buttons (blue outline on focus/click) */
+/* ✅ FIX #6: softer sidebar background helper (use this class on sidebar container if you want) */
+.sidebar-soft {
+  background:
+    radial-gradient(900px 500px at 10% 0%, rgba(124, 139, 255, 0.25), transparent 60%),
+    radial-gradient(800px 520px at 90% 20%, rgba(183, 162, 255, 0.22), transparent 60%),
+    linear-gradient(180deg, rgba(11, 11, 18, 0.55) 0%, rgba(11, 11, 18, 0.35) 100%);
+}
+
+/* Focus outline */
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid rgba(91, 108, 255, 0.9);
