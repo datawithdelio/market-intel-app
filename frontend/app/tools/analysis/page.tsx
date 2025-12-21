@@ -6,15 +6,33 @@ import SentimentChart from "../../../components/analysis/SentimentChart";
 import COTChart from "../../../components/analysis/COTChart";
 
 const macro = [
-  { t: "2024", price: 1.1 },
-  { t: "2025", price: 1.15, forecast: 1.18 },
-  { t: "2026", forecast: 1.22 },
+  { t: "Aug", hist: 1.06, forecast: null },
+  { t: "Sep", hist: 1.07, forecast: null },
+  { t: "Oct", hist: 1.09, forecast: null },
+  { t: "Nov", hist: 1.05, forecast: null },
+  { t: "Dec", hist: 1.08, forecast: null },
+  { t: "Jan", hist: null, forecast: 1.09 },
+  { t: "Feb", hist: null, forecast: 1.10 },
+  { t: "Mar", hist: null, forecast: 1.11 },
+  { t: "Apr", hist: null, forecast: 1.12 },
 ];
 
+
 const seasonality = [
-  { m: "Jan", pos: 3, neg: -1, avg: 0.5 },
-  { m: "Feb", pos: 1, neg: -2, avg: -0.3 },
+  { m: "Jan", pos: 2, neg: -1, avg5y: 0.2 },
+  { m: "Feb", pos: 1, neg: -2, avg5y: -0.1 },
+  { m: "Mar", pos: 3, neg: -1, avg5y: 0.3 },
+  { m: "Apr", pos: 4, neg: -1, avg5y: 0.5 },
+  { m: "May", pos: 3, neg: -2, avg5y: 0.2 },
+  { m: "Jun", pos: 2, neg: -1, avg5y: 0.1 },
+  { m: "Jul", pos: 1, neg: -3, avg5y: -0.2 },
+  { m: "Aug", pos: 2, neg: -2, avg5y: 0.0 },
+  { m: "Sep", pos: 1, neg: -2, avg5y: -0.1 },
+  { m: "Oct", pos: 2, neg: -1, avg5y: 0.1 },
+  { m: "Nov", pos: 1, neg: -4, avg5y: -0.4 },
+  { m: "Dec", pos: 3, neg: -1, avg5y: 0.4 },
 ];
+
 
 const sentiment = [
   { t: "20 Nov", sentiment: -0.28 },
@@ -43,6 +61,7 @@ const cot = [
   { t: "Dec", institutional: 8, retail: 35 },
 ];
 
+
 export default function Page() {
   return (
     <div style={{ maxWidth: 1200 }}>
@@ -52,11 +71,41 @@ export default function Page() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 20 }}>
         <div className="card">
           <h3>Macro Forecast</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 12, marginBottom: 12 }}>
+  <div style={{ background: "rgb(17,17,17)", borderRadius: 12, padding: 14 }}>
+    <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Current</div>
+    <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#0a3aa0ff" }}>1.084</div>
+  </div>
+  <div style={{ background: "rgb(17,17,17)", borderRadius: 12, padding: 14 }}>
+    <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>6M Forecast</div>
+    <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#9333ea" }}>1.120</div>
+  </div>
+  <div style={{ background: "rgb(17,17,17)", borderRadius: 12, padding: 14 }}>
+    <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Bias</div>
+    <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#16a34a" }}>↗</div>
+  </div>
+</div>
+
           <MacroForecastChart data={macro} />
         </div>
 
         <div className="card">
           <h3>Seasonality</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 12, marginBottom: 12 }}>
+  <div style={{ background: "#171717ff", borderRadius: 12, padding: 14 }}>
+    <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Best Month</div>
+    <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#16a34a" }}>Apr</div>
+  </div>
+  <div style={{ background: "#171717ff", borderRadius: 12, padding: 14 }}>
+    <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Worst Month</div>
+    <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#ef4444" }}>Nov</div>
+  </div>
+  <div style={{ background: "#171717ff", borderRadius: 12, padding: 14 }}>
+    <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>5Y Avg</div>
+    <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#2563eb" }}>+0.3%</div>
+  </div>
+</div>
+
           <SeasonalityChart data={seasonality} />
         </div>
 
@@ -71,7 +120,7 @@ export default function Page() {
     marginBottom: 12,
   }}
 >
-  <div style={{ background: "#f3f4f6", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "#171717ff", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>
       Average
     </div>
@@ -87,7 +136,7 @@ export default function Page() {
     </div>
   </div>
 
-  <div style={{ background: "#f3f4f6", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "#171717ff", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>
       Articles
     </div>
@@ -103,7 +152,7 @@ export default function Page() {
     </div>
   </div>
 
-  <div style={{ background: "#f3f4f6", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "#171717ff", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>
       Trend
     </div>
@@ -126,14 +175,14 @@ export default function Page() {
         <div className="card">
           <h3>Commitment of Traders (COT)</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, marginTop: 12, marginBottom: 12 }}>
-  <div style={{ background: "#f3f4f6", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "#171717ff", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Institutional %</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#f97316" }}>
       8% <span style={{ fontSize: 14, color: "#16a34a", marginLeft: 6 }}>+1%</span>
     </div>
   </div>
 
-  <div style={{ background: "#f3f4f6", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "#171717ff", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Retail %</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#a855f7" }}>35%</div>
   </div>

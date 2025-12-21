@@ -1,21 +1,54 @@
 "use client";
 
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceLine,
 } from "recharts";
 
-export default function MacroForecastChart({ data }: { data: any[] }) {
+type Point = { t: string; hist: number | null; forecast: number | null };
+
+export default function MacroForecastChart({ data }: { data: Point[] }) {
   return (
-    <div style={{ height: 320, width: "100%", minWidth: 0 }}>
+    <div style={{ width: "100%", height: 360, minWidth: 0 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
+        <AreaChart data={data} margin={{ top: 10, right: 18, left: 10, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="t" />
-          <YAxis />
+          <XAxis dataKey="t" tickMargin={10} />
+          <YAxis tickMargin={10} domain={["auto", "auto"]} />
           <Tooltip />
-          <Line dataKey="price" stroke="#2563eb" strokeWidth={3} dot={false} />
-          <Line dataKey="forecast" stroke="#9333ea" strokeDasharray="6 6" dot={false} />
-        </LineChart>
+
+          {/* optional baseline */}
+          <ReferenceLine y={0} stroke="#111827" strokeDasharray="4 4" />
+
+          {/* historical (solid) */}
+          <Area
+            type="monotone"
+            dataKey="hist"
+            stroke="#2563eb"
+            strokeWidth={2.5}
+            fill="#2563eb"
+            fillOpacity={0.14}
+            dot={false}
+          />
+
+          {/* forecast (dashed) */}
+          <Area
+            type="monotone"
+            dataKey="forecast"
+            stroke="#9333ea"
+            strokeWidth={2.5}
+            strokeDasharray="6 6"
+            fill="#9333ea"
+            fillOpacity={0.08}
+            dot={false}
+          />
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );
