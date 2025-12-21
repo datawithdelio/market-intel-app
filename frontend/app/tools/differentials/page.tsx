@@ -65,7 +65,7 @@ export default function Page() {
       </p>
 
       {/* CARD */}
-      <div style={{ marginTop: 18, background: "#fff", border: "1px solid #e5e7eb", borderRadius: 14, padding: 18 }}>
+      <div style={{ marginTop: 18, background: "rgb(17, 17, 17)", border: "1px solid #e5e7eb", borderRadius: 14, padding: 18 }}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
           <div>
             <div style={{ fontWeight: 900 }}>Interest Rates Comparison</div>
@@ -104,26 +104,29 @@ export default function Page() {
 
         {/* timeframe pills */}
         <div style={{ display: "flex", justifyContent: "center", marginTop: 22 }}>
-          <div style={{ display: "inline-flex", gap: 8, padding: 6, background: "#f3f4f6", borderRadius: 999 }}>
-            {tfTabs.map((t) => {
-              const active = t === tf;
-              return (
-                <button
-                  key={t}
-                  onClick={() => setTf(t)}
-                  style={{
-                    padding: "8px 12px",
-                    borderRadius: 999,
-                    border: "1px solid transparent",
-                    background: active ? "#fff" : "transparent",
-                    fontWeight: 900,
-                    cursor: "pointer",
-                  }}
-                >
-                  {t}
-                </button>
-              );
-            })}
+          <div style={{ display: "inline-flex", gap: 8, padding: 6, background: "#0000", borderRadius: 999 }}>
+           {tfTabs.map((t) => {
+  const active = t === tf;
+
+  return (
+    <button
+      key={t}
+      onClick={() => setTf(t)}
+      style={{
+        padding: "8px 14px",
+        borderRadius: 999,
+        border: active ? "2px solid #2563eb" : "2px solid transparent", // 🔵 blue border
+        background: active ? "#0c0c0c" : "transparent",
+        color: active ? "#ffffff" : "#9aa0a6",
+        fontWeight: 900,
+        cursor: "pointer",
+      }}
+    >
+      {t}
+    </button>
+  );
+})}
+
           </div>
         </div>
 

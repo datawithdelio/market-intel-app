@@ -6,14 +6,16 @@ type Props = {
 export default function RateTypeToggle({ value, onChange }: Props) {
   const btn = (label: string, v: "nominal" | "real") => {
     const active = value === v;
+
     return (
       <button
         onClick={() => onChange(v)}
         style={{
-          padding: "8px 12px",
-          borderRadius: 12,
-          border: "1px solid #e8e8e8",
-          background: active ? "#fff" : "#f4f4f4",
+          padding: "8px 14px",
+          borderRadius: 999,
+          border: "1px solid #222",
+          background: active ? "#0c0c0c" : "transparent",
+          color: active ? "#ffffff" : "#9aa0a6",
           fontWeight: 700,
           cursor: "pointer",
         }}
@@ -24,7 +26,16 @@ export default function RateTypeToggle({ value, onChange }: Props) {
   };
 
   return (
-    <div style={{ display: "inline-flex", gap: 8, padding: 6, borderRadius: 14, background: "#f4f4f4" }}>
+    <div
+      style={{
+        display: "inline-flex",
+        gap: 6,
+        padding: 6,
+        borderRadius: 999,
+        background: "#111",
+        border: "1px solid #222",
+      }}
+    >
       {btn("Nominal Rates", "nominal")}
       {btn("Real Rates", "real")}
     </div>

@@ -1,6 +1,6 @@
 type Row = {
   label: string;
-  value: number; // percentage, e.g. -1.94 or 1.52
+  value: number; // percent, e.g. -1.94 or 1.52
 };
 
 type Props = {
@@ -8,11 +8,10 @@ type Props = {
 };
 
 export default function CurrencyPerformanceChart({ data }: Props) {
-  // find max absolute value to scale bars
-  const maxAbs = Math.max(...data.map(d => Math.abs(d.value)), 0.01);
+  const maxAbs = Math.max(...data.map((d) => Math.abs(d.value)), 0.01);
 
   const chartHeight = 260;
-  const zeroLine = chartHeight / 2;
+  const half = chartHeight / 2;
 
   return (
     <div
@@ -24,13 +23,12 @@ export default function CurrencyPerformanceChart({ data }: Props) {
         border: "1px solid #222",
       }}
     >
-      {/* Chart area */}
       <div style={{ position: "relative", height: chartHeight }}>
         {/* zero line */}
         <div
           style={{
             position: "absolute",
-            top: zeroLine,
+            top: half,
             left: 0,
             right: 0,
             height: 1,
@@ -38,68 +36,72 @@ export default function CurrencyPerformanceChart({ data }: Props) {
           }}
         />
 
-        {/* bars */}
         <div
           style={{
             display: "flex",
-            alignItems: "flex-end",
             gap: 14,
             height: chartHeight,
+            alignItems: "stretch",
           }}
         >
           {data.map((row) => {
-            const barHeight =
-              (Math.abs(row.value) / maxAbs) * (chartHeight * 0.45);
             const isPositive = row.value >= 0;
+            const barHeight = (Math.abs(row.value) / maxAbs) * (half * 0.9);
 
             return (
-              <div
-                key={row.label}
-                style={{ flex: 1, textAlign: "center" }}
-              >
+              <div key={row.label} style={{ flex: 1, textAlign: "center" }}>
                 {/* value label */}
-                <div
-                  style={{
-                    height: chartHeight * 0.15,
-                    fontWeight: 700,
-                    color: "#cfd3d7",
-                  }}
-                >
-                  {row.value > 0
-                    ? `+${row.value.toFixed(2)}%`
-                    : `${row.value.toFixed(2)}%`}
+                <div style={{ height: 30, fontWeight: 700, color: "#cfd3d7" }}>
+                  {row.value > 0 ? `+${row.value.toFixed(2)}%` : `${row.value.toFixed(2)}%`}
                 </div>
 
-                {/* bar container */}
-                <div
-                  style={{
-                    position: "relative",
-                    height: chartHeight * 0.7,
-                  }}
-                >
+                {/* chart column */}
+                <div style={{ height: chartHeight - 60, display: "flex", flexDirection: "column" }}>
+                  {/* positive half */}
                   <div
                     style={{
-                      position: "absolute",
-                      left: "20%",
-                      right: "20%",
-                      bottom: isPositive
-                        ? zeroLine - chartHeight * 0.35
-                        : zeroLine - chartHeight * 0.35 - barHeight,
-                      height: barHeight,
-                      borderRadius: 10,
-                      background: isPositive ? "#12b981" : "#ef4444",
+                      height: half - 30,
+                      display: "flex",
+                      alignItems: "flex-end",
+                      justifyContent: "center",
                     }}
-                  />
+                  >
+                    {isPositive && (
+                      <div
+                        style={{
+                          width: "60%",
+                          height: barHeight,
+                          borderRadius: 10,
+                          background: "#12b981",
+                        }}
+                      />
+                    )}
+                  </div>
+
+                  {/* negative half */}
+                  <div
+                    style={{
+                      height: half - 30,
+                      display: "flex",
+                      alignItems: "flex-start",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {!isPositive && (
+                      <div
+                        style={{
+                          width: "60%",
+                          height: barHeight,
+                          borderRadius: 10,
+                          background: "#ef4444",
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
 
                 {/* currency label */}
-                <div
-                  style={{
-                    marginTop: 10,
-                    fontWeight: 700,
-                    color: "#9aa0a6",
-                  }}
-                >
+                <div style={{ marginTop: 14, paddingTop: 4, fontWeight: 700, color: "#9aa0a6" }}>
                   {row.label}
                 </div>
               </div>
