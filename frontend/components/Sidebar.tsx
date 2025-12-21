@@ -27,6 +27,7 @@ export default function Sidebar() {
           <Link href="/economy/regime" style={linkStyle}>Regime</Link>
           <Link href="/economy/indicators" style={linkStyle}>Indicators</Link>
           <Link href="/economy/news" style={linkStyle}>News</Link>
+          <Link href="/economy/calendar" style={linkStyle}>Calendar</Link>
         </nav>
       </div>
 
