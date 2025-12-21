@@ -6,8 +6,8 @@ type Point = { label: string; a: number; b: number };
 
 export default function DifferentialsChart({ data }: { data: Point[] }) {
   return (
-    <div style={{ marginTop: 18, height: 340, width: "100%" }}>
-      <ResponsiveContainer>
+    <div style={{ width: "100%", height: 340, minWidth: 0, marginTop: 18 }}>
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 10, right: 18, left: 0, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="label" />
@@ -20,3 +20,4 @@ export default function DifferentialsChart({ data }: { data: Point[] }) {
     </div>
   );
 }
+
