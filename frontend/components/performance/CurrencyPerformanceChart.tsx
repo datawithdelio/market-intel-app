@@ -19,8 +19,8 @@ export default function CurrencyPerformanceChart({ data }: Props) {
         marginTop: 20,
         padding: 16,
         borderRadius: 12,
-        background: "#0c0c0c",
-        border: "1px solid #222",
+        background: "transparent",
+        border: "1px solid #fffefeff",
       }}
     >
       <div style={{ position: "relative", height: chartHeight }}>

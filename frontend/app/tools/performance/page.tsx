@@ -83,8 +83,8 @@ export default function Page() {
       <div
         style={{
           marginTop: 20,
-          background: "#111",
-          border: "1px solid #222",
+          background: "transparent",
+          border: "1px solid #fffefeff",
           borderRadius: 14,
           padding: 18,
         }}
