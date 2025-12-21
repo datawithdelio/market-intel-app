@@ -145,7 +145,7 @@ export default function Page() {
         marginTop: 6,
         fontWeight: 900,
         fontSize: 22,
-        color: "#111827",
+        color: "#1258eeff",
       }}
     >
       508
