@@ -34,6 +34,7 @@ export default function Sidebar() {
         <div style={{ fontWeight: 600, marginBottom: 8 }}>Tools</div>
         <nav>
           <Link href="/tools/performance" style={linkStyle}>Performance</Link>
+          <Link href="/tools/analysis" style={linkStyle}>Analysis</Link>
           <Link href="/tools/differentials" style={linkStyle}>Differentials</Link>
           <Link href="/tools/correlations" style={linkStyle}>Correlations</Link>
           <Link href="/tools/tracker" style={linkStyle}>Tracker</Link>
