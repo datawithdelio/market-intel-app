@@ -14,8 +14,8 @@ export default function RateTypeToggle({ value, onChange }: Props) {
           padding: "8px 14px",
           borderRadius: 999,
           border: "1px solid #222",
-          background: active ? "#0c0c0c" : "transparent",
-          color: active ? "#ffffff" : "#9aa0a6",
+          background: active ? "#929292" : "transparent",
+           color: active ? "#000000" : "#cfd3d7",
           fontWeight: 700,
           cursor: "pointer",
         }}
@@ -32,7 +32,7 @@ export default function RateTypeToggle({ value, onChange }: Props) {
         gap: 6,
         padding: 6,
         borderRadius: 999,
-        background: "#111",
+        background: "transparent",
         border: "1px solid #222",
       }}
     >

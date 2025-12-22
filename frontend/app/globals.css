@@ -15,7 +15,6 @@
   --text-on-dark: #e9e9f2;
 
   /* ✅ FIX #1: lighter glass cards */
-  --card: rgba(255, 255, 255, 0.82);
   --card-strong: rgba(255, 255, 255, 0.9);
   --stroke: rgba(255, 255, 255, 0.35);
 
@@ -32,18 +31,19 @@
 html,
 body {
   height: 100%;
+  background: transparent;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
-  color: var(--text-on-dark);
-
-  /* Main background like the screenshot */
+  min-height: 100vh;
   background:
-    radial-gradient(900px 500px at 12% 12%, rgba(124, 139, 255, 0.55), transparent 60%),
-    radial-gradient(800px 520px at 82% 18%, rgba(183, 162, 255, 0.55), transparent 60%),
-    radial-gradient(900px 700px at 50% 80%, rgba(231, 221, 255, 0.35), transparent 65%),
-    linear-gradient(180deg, #0b0b12 0%, #0b0b12 100%);
+    radial-gradient(900px 520px at 18% 10%, rgba(124,139,255,0.35), transparent 60%),
+    radial-gradient(900px 520px at 82% 18%, rgba(183,162,255,0.28), transparent 62%),
+    radial-gradient(1000px 720px at 50% 85%, rgba(231,221,255,0.12), transparent 70%),
+    linear-gradient(180deg, #0b0b12 0%, rgb(11,11,18) 100%);
+  color: rgba(255,255,255,0.92);
 }
 
 /* Glass surfaces */
@@ -71,7 +71,6 @@ body {
   color: var(--text-muted);
 }
 
-/* ✅ FIX #6: softer sidebar background helper (use this class on sidebar container if you want) */
 .sidebar-soft {
   background:
     radial-gradient(900px 500px at 10% 0%, rgba(124, 139, 255, 0.25), transparent 60%),
@@ -610,4 +609,11 @@ a:focus-visible {
 }
 .page-subtitle {
   color: rgba(255, 255, 255, 0.72);
+}
+
+#__next,
+main,
+body > div {
+  min-height: 100vh;
+  background: transparent;
 }

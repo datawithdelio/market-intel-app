@@ -13,7 +13,7 @@ export default function TimeframeTabs({ value, onChange }: Props) {
         gap: 8,
         padding: 8,
         borderRadius: 12,
-        background: "#0c0c0c",
+        background: "transparent",
         border: "1px solid #222",
         marginTop: 16,
       }}
@@ -28,8 +28,8 @@ export default function TimeframeTabs({ value, onChange }: Props) {
               padding: "8px 12px",
               borderRadius: 10,
               border: "1px solid #222",
-              background: active ? "#fff" : "#111",
-              color: active ? "#000" : "#cfd3d7",
+              background: active ? "#fff" : "transparent",
+              color: active ? "#000000" : "#cfd3d7",
               cursor: "pointer",
               fontWeight: 600,
             }}
