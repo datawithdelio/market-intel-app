@@ -14,6 +14,7 @@ const platform: NavItem[] = [{ label: "Dashboard", href: "/" }];
 const economy: NavItem[] = [
   { label: "Regime", href: "/economy/regime" },
   { label: "Indicators", href: "/economy/indicators" },
+  { label: "Central Bank", href: "/economy/central-bank" }, // ✅ ADDED
   { label: "News", href: "/economy/news" },
   { label: "Calendar", href: "/economy/calendar" },
 ];
@@ -68,16 +69,21 @@ function Section({
                   padding: "10px 12px",
                   borderRadius: 16,
                   fontWeight: active ? 900 : 800,
-                  color: active ? "rgba(20,20,37,0.95)" : "rgba(233,233,242,0.92)",
+                  color: active
+                    ? "rgba(20,20,37,0.95)"
+                    : "rgba(233,233,242,0.92)",
                   background: active ? "rgba(255,255,255,0.82)" : "transparent",
-                  border: active ? "1px solid rgba(255,255,255,0.35)" : "1px solid transparent",
+                  border: active
+                    ? "1px solid rgba(255,255,255,0.35)"
+                    : "1px solid transparent",
                   boxShadow: active ? "0 12px 26px rgba(0,0,0,0.16)" : "none",
                   transition: "all 140ms ease",
                 }}
                 onMouseEnter={(e) => {
                   if (active) return;
                   e.currentTarget.style.background = "rgba(255,255,255,0.10)";
-                  e.currentTarget.style.border = "1px solid rgba(255,255,255,0.14)";
+                  e.currentTarget.style.border =
+                    "1px solid rgba(255,255,255,0.14)";
                 }}
                 onMouseLeave={(e) => {
                   if (active) return;
@@ -122,7 +128,14 @@ export default function Sidebar() {
         >
           Market Intel
         </div>
-        <div style={{ marginTop: 6, color: "rgba(233,233,242,0.62)", fontWeight: 700, fontSize: 12 }}>
+        <div
+          style={{
+            marginTop: 6,
+            color: "rgba(233,233,242,0.62)",
+            fontWeight: 700,
+            fontSize: 12,
+          }}
+        >
           Macro • FX • Regime • Calendar
         </div>
       </div>
