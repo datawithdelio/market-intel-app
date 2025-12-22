@@ -7,7 +7,7 @@ export default function Page() {
     <div
       style={{
         minHeight: "100vh",
-        background: "rgb(17,17,17)",
+        background: "transparent",
         padding: 24,
       }}
     >
@@ -31,7 +31,7 @@ export default function Page() {
           {/* LEFT COLUMN */}
           <div
             style={{
-              background: "#0f0f0f",
+              background: "transparent",
               border: "1px solid #222",
               borderRadius: 16,
               padding: 20,
