@@ -60,6 +60,7 @@ export default function Page() {
         margin: -24,
         padding: 24,
         color: "rgba(255,255,255,0.92)",
+        background: "transparent",
       }}
     >
       <div style={{ maxWidth: 1300, margin: "0 auto" }}>
