@@ -1,5 +1,9 @@
-import EconomicCalendarUI from "@/components/calendar/EconomicCalendarUI";
+import EconomicCalendarUI from "@/components/EconomicCalendarUI";
 
 export default function CalendarPage() {
-  return <EconomicCalendarUI />;
+  return (
+    <div className="px-8 py-8">
+      <EconomicCalendarUI />
+    </div>
+  );
 }

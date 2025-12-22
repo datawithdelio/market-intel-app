@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /* Background (lavender / purple like the reference) */
   --bg-0: #0b0b12;
@@ -81,4 +85,529 @@ a:focus-visible {
   outline: 2px solid rgba(91, 108, 255, 0.9);
   outline-offset: 2px;
   border-radius: 10px;
+}
+/* =========================================================
+   NEWS PAGE UI (Market News)
+   ========================================================= */
+
+/* Filter pills */
+.pill {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--stroke);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pill:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
+}
+
+/* News cards */
+.glass-card {
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+}
+
+/* Impact badges */
+.impact {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.impact.high {
+  background: rgba(255, 138, 76, 0.18);
+  color: var(--orange);
+}
+
+.impact.medium {
+  background: rgba(91, 108, 255, 0.18);
+  color: var(--blue);
+}
+
+.impact.low {
+  background: rgba(40, 167, 69, 0.18);
+  color: #28a745;
+}
+
+/* =========================
+   NEWS UI (purple glass)
+========================= */
+
+.news-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 0 40px;
+}
+
+.news-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.news-title {
+  margin: 0;
+  font-size: 40px;
+  letter-spacing: -0.02em;
+}
+
+.news-subtitle {
+  margin: 6px 0 0;
+  color: rgba(233, 233, 242, 0.75);
+}
+
+.news-filters {
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+}
+
+.seg {
+  display: inline-flex;
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+}
+
+.segBtn {
+  border: 0;
+  background: transparent;
+  color: rgba(233,233,242,0.8);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.segBtn.on {
+  background: rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.95);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.select {
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.9);
+  outline: none;
+}
+
+.toggle {
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+}
+
+.toggle.on {
+  background: rgba(124, 139, 255, 0.22);
+  border-color: rgba(124, 139, 255, 0.35);
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 0.9fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.news-feed {
+  display: grid;
+  gap: 14px;
+}
+
+.news-card {
+  padding: 14px 14px 12px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.10); /* darker card like the reference */
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255,255,255,0.92);
+}
+
+.news-cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.chipRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chip {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.90);
+  font-size: 12px;
+}
+
+.mutedChip {
+  color: rgba(255,255,255,0.70);
+}
+
+.time {
+  font-size: 12px;
+}
+
+.news-h {
+  margin: 6px 0 6px;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+
+.news-p {
+  margin: 0 0 12px;
+  line-height: 1.45;
+  color: rgba(233,233,242,0.74);
+}
+
+.news-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pillRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.86);
+  font-size: 12px;
+}
+
+.pill.good {
+  background: rgba(56, 189, 248, 0.16);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.pill.bad {
+  background: rgba(248, 113, 113, 0.16);
+  border-color: rgba(248, 113, 113, 0.25);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.iconBtn {
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.86);
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.iconBtn:hover {
+  background: rgba(255,255,255,0.10);
+}
+
+.news-side {
+  display: grid;
+  gap: 14px;
+}
+
+.news-panel {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.92);
+}
+
+.panelTitle {
+  margin: 0 0 10px;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  color: rgba(255,255,255,0.92);
+}
+
+.panelList {
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(233,233,242,0.74);
+}
+
+.assetGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.assetRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.watchItem {
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(0,0,0,0.16);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .news-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .news-filters {
+    justify-items: start;
+  }
+  .news-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== News contrast upgrade ===== */
+
+/* Stronger card surface */
+.news-card,
+.news-panel,
+.watchItem {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Add a soft purple glow behind each card */
+.news-card::before,
+.news-panel::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 18px;
+  pointer-events: none;
+  background: radial-gradient(
+    700px 280px at 35% 0%,
+    rgba(124, 90, 255, 0.22),
+    transparent 60%
+  );
+  opacity: 1;
+}
+
+/* Ensure the pseudo-element works */
+.news-card,
+.news-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.news-h {
+  color: rgba(255, 255, 255, 0.96);
+  font-weight: 650;
+}
+
+.news-p {
+  color: rgba(233, 233, 242, 0.78);
+}
+
+/* Vibrant arrows via stronger pill tones */
+.pill.good {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: rgba(56, 189, 248, 0.45);
+  color: rgba(235, 250, 255, 0.95);
+  box-shadow: 0 10px 30px rgba(56, 189, 248, 0.18);
+}
+
+.pill.bad {
+  background: rgba(248, 113, 113, 0.22);
+  border-color: rgba(248, 113, 113, 0.45);
+  color: rgba(255, 240, 240, 0.95);
+  box-shadow: 0 10px 30px rgba(248, 113, 113, 0.18);
+}
+
+.pill {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.chip {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mutedChip {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.news-card:hover {
+  transform: translateY(-2px);
+  transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.news-card,
+.news-panel {
+  background: linear-gradient(
+    180deg,
+    rgba(140, 120, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+}
+
+/* =========================
+   UI Controls (buttons / pills / chips)
+   Paste at BOTTOM of globals.css
+========================= */
+
+.ui-card {
+  background: rgba(90, 70, 150, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.ui-card-strong {
+  background: rgba(120, 85, 210, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,0.38);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* top filters buttons (All Assets / FX / Equities / Crypto) */
+.ui-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.86);
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.ui-tab:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.20);
+}
+.ui-tab-active {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* small rounded tags inside cards (US / MACRO / FX etc.) */
+.ui-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.18);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* action buttons like Save / Share */
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.86);
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.ui-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* Vibrant arrows (more contrast like you wanted) */
+.arrow-up {
+  background: rgba(70, 200, 160, 0.22);
+  border: 1px solid rgba(70, 200, 160, 0.35);
+  color: rgba(210, 255, 240, 0.95);
+}
+.arrow-down {
+  background: rgba(255, 95, 135, 0.18);
+  border: 1px solid rgba(255, 95, 135, 0.35);
+  color: rgba(255, 225, 235, 0.95);
+}
+
+/* Make text look like News */
+.page-title {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.page-subtitle {
+  color: rgba(255, 255, 255, 0.72);
 }

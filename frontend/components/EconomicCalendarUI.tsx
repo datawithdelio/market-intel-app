@@ -1,6 +1,6 @@
 "use client";
-
-import { useMemo, useState } from "react";
+import GlassCard from "@/components/GlassCard";
+import React, { useMemo, useState } from "react";
 
 type Impact = "Low" | "Medium" | "High";
 
@@ -69,34 +69,38 @@ function impactStars(impact: Impact) {
   return "★";
 }
 
-function impactBadgeClass(impact: Impact) {
-  // no explicit colors; just opacity + border so it stays clean
-  if (impact === "High") return "border-white/25 text-white";
-  if (impact === "Medium") return "border-white/20 text-white/90";
-  return "border-white/15 text-white/80";
+function impactPillClass(impact: Impact) {
+  // stronger visual separation than plain border-only
+  if (impact === "High") return "bg-white/12 border-white/20 text-white/95";
+  if (impact === "Medium") return "bg-white/9 border-white/18 text-white/90";
+  return "bg-white/7 border-white/14 text-white/80";
 }
 
-function GlassCard({
+function valuePillClass(value?: string) {
+  if (!value) return "bg-white/6 border-white/10 text-white/70";
+  // simple rule: negative => down, otherwise up
+  const isNeg = value.trim().startsWith("-");
+  return isNeg ? "arrow-down" : "arrow-up";
+}
+
+function Card({
   title,
   right,
+  strong = false,
   children,
   className = "",
 }: {
   title?: string;
   right?: React.ReactNode;
+  strong?: boolean;
   children: React.ReactNode;
   className?: string;
 }) {
   return (
-    <div
-      className={[
-        "rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-sm",
-        className,
-      ].join(" ")}
-    >
+    <div className={[strong ? "ui-card-strong" : "ui-card", className].join(" ")}>
       {(title || right) && (
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-          <div className="text-base font-semibold text-white/95">{title}</div>
+          <div className="text-white/95 font-semibold">{title}</div>
           {right}
         </div>
       )}
@@ -105,12 +109,8 @@ function GlassCard({
   );
 }
 
-function SoftButton({ children }: { children: React.ReactNode }) {
-  return (
-    <button className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white/90 hover:bg-white/10 transition">
-      {children}
-    </button>
-  );
+function IconButton({ children }: { children: React.ReactNode }) {
+  return <button className="ui-btn">{children}</button>;
 }
 
 export default function EconomicCalendarUI() {
@@ -129,20 +129,19 @@ export default function EconomicCalendarUI() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header (News-like typography) */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-white">
-            Economic Calendar
-          </h1>
-          <p className="mt-1 text-sm text-white/60 max-w-xl">
+          <h1 className="page-title text-6xl text-white">Economic Calendar</h1>
+          <p className="page-subtitle mt-2 max-w-xl">
             Track high-impact macro events across major economies.
           </p>
         </div>
 
+        {/* Filters (use ui-tab style) */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-xl">
-            <span className="text-sm text-white/70">🌐</span>
+          <div className="ui-tab ui-tab-active">
+            🌐
             <select
               className="bg-transparent text-sm text-white/90 outline-none"
               value={country}
@@ -158,8 +157,8 @@ export default function EconomicCalendarUI() {
             </select>
           </div>
 
-          <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-xl">
-            <span className="text-sm text-white/70">⚡</span>
+          <div className="ui-tab">
+            ⚡
             <select
               className="bg-transparent text-sm text-white/90 outline-none"
               value={impact}
@@ -174,173 +173,116 @@ export default function EconomicCalendarUI() {
         </div>
       </div>
 
-      {/* Action row like your mock */}
+      {/* Action row */}
       <div className="flex flex-wrap gap-2">
-        <SoftButton>↻ Refresh</SoftButton>
-        <SoftButton>◎ Competitors</SoftButton>
-        <SoftButton>⤴ Share</SoftButton>
+        <IconButton>↻ Refresh</IconButton>
+        <IconButton>◎ Competitors</IconButton>
+        <IconButton>⤴ Share</IconButton>
       </div>
 
       {/* Grid */}
       <div className="grid grid-cols-12 gap-6">
         {/* Left: table */}
         <div className="col-span-12 xl:col-span-8">
-          <GlassCard
+          <Card
             title="Economic Events"
-            right={<span className="text-xs text-white/50">Preview</span>}
+            right={<span className="text-xs text-white/55">Preview</span>}
+            strong
             className="overflow-hidden"
           >
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-white/55">
-                    <th className="py-3 pr-4 font-medium">Date</th>
-                    <th className="py-3 pr-4 font-medium">Time</th>
-                    <th className="py-3 pr-4 font-medium">Event</th>
-                    <th className="py-3 pr-4 font-medium">Actual</th>
-                    <th className="py-3 pr-4 font-medium">Forecast</th>
-                    <th className="py-3 pr-4 font-medium">Previous</th>
-                    <th className="py-3 pr-0 font-medium">Impact</th>
-                  </tr>
-                </thead>
-
-                <tbody className="text-white/90">
-                  {filtered.map((e) => (
-                    <tr key={e.id} className="border-t border-white/10">
-                      <td className="py-4 pr-4 whitespace-nowrap text-white/80">
-                        {e.date}
-                      </td>
-                      <td className="py-4 pr-4 whitespace-nowrap text-white/80">
-                        {e.time}
-                      </td>
-                      <td className="py-4 pr-4">
-                        <div className="font-medium text-white/95">
-                          {e.event}
-                        </div>
-                        <div className="mt-1 text-xs text-white/50">
-                          {e.country}
-                        </div>
-                      </td>
-                      <td className="py-4 pr-4">{e.actual ?? "—"}</td>
-                      <td className="py-4 pr-4 text-white/80">
-                        {e.forecast ?? "—"}
-                      </td>
-                      <td className="py-4 pr-4 text-white/80">
-                        {e.previous ?? "—"}
-                      </td>
-                      <td className="py-4 pr-0">
-                        <span
-                          className={[
-                            "inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs",
-                            impactBadgeClass(e.impact),
-                          ].join(" ")}
-                        >
-                          <span className="opacity-80">
-                            {impactStars(e.impact)}
-                          </span>
-                          <span className="text-white/70">{e.impact}</span>
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-
-                  {filtered.length === 0 && (
-                    <tr className="border-t border-white/10">
-                      <td className="py-10 text-white/60" colSpan={7}>
-                        No events match your filters.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+              
             </div>
-          </GlassCard>
+          </Card>
         </div>
 
         {/* Right: cards */}
         <div className="col-span-12 xl:col-span-4 space-y-6">
-          <GlassCard title="Major Impacts Today">
-            {/* Donut placeholder (clean aesthetic without hard colors) */}
+          <Card title="Major Impacts Today" strong>
             <div className="flex items-center justify-between gap-4">
-              <div className="w-28 h-28 rounded-full border border-white/15 bg-white/5 grid place-items-center text-xl font-semibold text-white/90">
-                42%
+              <div className="ui-card-strong w-28 h-28 grid place-items-center">
+                <div className="text-2xl font-semibold text-white/95">42%</div>
+                <div className="text-xs text-white/70 -mt-1">High impact</div>
               </div>
-              <div className="space-y-1 text-sm text-white/70">
-                <div>High impact share</div>
-                <div className="text-xs text-white/45">
-                  (Replace with real chart later)
+
+              <div className="space-y-2 text-sm text-white/75">
+                <div className="flex items-center gap-2">
+                  <span className="ui-chip">High</span>
+                  <span className="text-white/85">42%</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="ui-chip">Medium</span>
+                  <span className="text-white/85">25%</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="ui-chip">Low</span>
+                  <span className="text-white/85">33%</span>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-4 text-sm text-white/70">
+              Reflation typically favors cyclical assets as growth recovers while inflation stabilizes.
             </div>
 
             <div className="mt-5 space-y-3">
               {majorToday.map((e) => (
                 <div key={e.id} className="flex items-center justify-between">
                   <div>
-                    <div className="text-sm font-medium text-white/90">
-                      {e.event}
-                    </div>
-                    <div className="text-xs text-white/50">
+                    <div className="text-sm font-semibold text-white/90">{e.event}</div>
+                    <div className="text-xs text-white/55">
                       {e.country} • {e.time}
                     </div>
                   </div>
-                  <div className="text-xs text-white/60">
-                    {impactStars(e.impact)}
-                  </div>
+                  <div className="text-xs text-white/70">{impactStars(e.impact)}</div>
                 </div>
               ))}
               {majorToday.length === 0 && (
-                <div className="text-sm text-white/60">No high-impact items.</div>
+                <div className="text-sm text-white/65">No high-impact items.</div>
               )}
             </div>
-          </GlassCard>
+          </Card>
 
-          <GlassCard title="Top Impactful Releases">
+          <Card title="Top Impactful Releases">
             <div className="space-y-3">
               {majorToday.slice(0, 3).map((e) => (
-                <div
-                  key={e.id}
-                  className="rounded-xl border border-white/10 bg-white/5 p-3"
-                >
+                <div key={e.id} className="ui-card p-4">
                   <div className="flex items-center justify-between gap-3">
-                    <div className="text-sm font-medium text-white/90">
-                      {e.event}
-                    </div>
-                    <div className="text-xs text-white/60">
-                      {impactStars(e.impact)}
-                    </div>
+                    <div className="text-sm font-semibold text-white/90">{e.event}</div>
+                    <div className="text-xs text-white/70">{impactStars(e.impact)}</div>
                   </div>
-                  <div className="mt-1 text-xs text-white/50">
-                    {e.country} • {e.time}
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="ui-chip">{e.country}</span>
+                    <span className="ui-chip">{e.time}</span>
                   </div>
                 </div>
               ))}
-              {majorToday.length === 0 && (
-                <div className="text-sm text-white/60">—</div>
-              )}
+              {majorToday.length === 0 && <div className="text-sm text-white/65">—</div>}
             </div>
-          </GlassCard>
+          </Card>
 
-          <GlassCard title="Week Ahead">
-            <div className="text-sm text-white/70">
-              This section can be fed by the same events list (grouped by day) once
-              you plug real calendar data.
+          <Card title="Week Ahead">
+            <div className="text-sm text-white/75">
+              This can be fed by the same events list (grouped by day) once you plug real calendar data.
             </div>
+
             <div className="mt-4 space-y-2 text-sm">
               {filtered.slice(0, 4).map((e) => (
-                <div key={e.id} className="flex items-center justify-between text-white/80">
-                  <span className="truncate">{e.date} — {e.event}</span>
-                  <span className="text-white/50 whitespace-nowrap">{e.time}</span>
+                <div key={e.id} className="ui-card p-4 flex items-center justify-between">
+                  <span className="text-white/85 truncate">
+                    {e.date} — {e.event}
+                  </span>
+                  <span className="text-white/60 whitespace-nowrap">{e.time}</span>
                 </div>
               ))}
             </div>
-          </GlassCard>
+          </Card>
         </div>
       </div>
 
       {/* Bottom: Upcoming chart placeholder */}
-      <GlassCard title="Upcoming Impactful Releases">
-        <div className="text-sm text-white/60">
+      <Card title="Upcoming Impactful Releases" className="overflow-hidden">
+        <div className="text-sm text-white/70">
           Chart placeholder (we can build a real bar chart once you decide the data source).
         </div>
 
@@ -348,16 +290,20 @@ export default function EconomicCalendarUI() {
           {[62, 80, 55, 45, 30, 50].map((h, idx) => (
             <div key={idx} className="flex flex-col items-center gap-2">
               <div
-                className="w-full rounded-xl border border-white/10 bg-white/5"
-                style={{ height: `${h}px` }}
+                className="ui-card-strong w-full"
+                style={{ height: `${h}px`, borderRadius: 14 }}
               />
-              <div className="text-[11px] text-white/45">
+              <div className="text-[11px] text-white/55">
                 {["Fed", "Core", "Jobs", "Retail", "PMI", "GDP"][idx]}
               </div>
             </div>
           ))}
         </div>
-      </GlassCard>
+
+        <div className="mt-4 text-sm text-white/70">
+          Practical takeaway: Risk-on bias; defensive positioning tends to underperform.
+        </div>
+      </Card>
     </div>
   );
 }
