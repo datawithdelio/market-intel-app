@@ -72,15 +72,15 @@ export default function Page() {
         <div className="card">
           <h3>Macro Forecast</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 12, marginBottom: 12 }}>
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Current</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#0a3aa0ff" }}>1.084</div>
   </div>
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>6M Forecast</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#9333ea" }}>1.120</div>
   </div>
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Bias</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#16a34a" }}>↗</div>
   </div>
@@ -92,15 +92,15 @@ export default function Page() {
         <div className="card">
           <h3>Seasonality</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginTop: 12, marginBottom: 12 }}>
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Best Month</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#16a34a" }}>Apr</div>
   </div>
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Worst Month</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#ef4444" }}>Nov</div>
   </div>
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>5Y Avg</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#2563eb" }}>+0.3%</div>
   </div>
@@ -120,7 +120,7 @@ export default function Page() {
     marginBottom: 12,
   }}
 >
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>
       Average
     </div>
@@ -136,7 +136,7 @@ export default function Page() {
     </div>
   </div>
 
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>
       Articles
     </div>
@@ -152,7 +152,7 @@ export default function Page() {
     </div>
   </div>
 
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>
       Trend
     </div>
@@ -175,14 +175,14 @@ export default function Page() {
         <div className="card">
           <h3>Commitment of Traders (COT)</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12, marginTop: 12, marginBottom: 12 }}>
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Institutional %</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#f97316" }}>
       8% <span style={{ fontSize: 14, color: "#16a34a", marginLeft: 6 }}>+1%</span>
     </div>
   </div>
 
-  <div style={{ background: "transparent", borderRadius: 12, padding: 14 }}>
+  <div style={{ background: "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12))", borderRadius: 12, padding: 14 }}>
     <div style={{ color: "#6b7280", fontWeight: 700, fontSize: 13 }}>Retail %</div>
     <div style={{ marginTop: 6, fontWeight: 900, fontSize: 22, color: "#a855f7" }}>35%</div>
   </div>
