@@ -21,6 +21,7 @@ export default function Page() {
     backdropFilter: "blur(14px)",
     WebkitBackdropFilter: "blur(14px)",
     overflow: "hidden",
+    minWidth: 0, 
   };
 
   // Slightly lighter inner card (for small blocks inside panels)
@@ -31,6 +32,7 @@ export default function Page() {
     boxShadow: "0 14px 40px rgba(0,0,0,0.35)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
+    minWidth: 0,
   };
 
   return (
@@ -63,6 +65,7 @@ export default function Page() {
           }}
         >
           {/* LEFT COLUMN (Regime-style big panel) */}
+          <div style={{ minWidth: 0, }}>
           <div style={{ ...panel }}>
             <div style={{ padding: 18, borderBottom: divider }}>
               <div style={{ fontWeight: 950, marginBottom: 10, color: textPrimary }}>
@@ -131,16 +134,18 @@ export default function Page() {
               </div>
             </div>
           </div>
+        </div>  
 
           {/* RIGHT COLUMN (wrap TrendsPanel to force Regime vibe) */}
-          <div style={{ ...panel }}>
+          <div style={{ minWidth: 0, }}>
+          <div style={{ ...panel, minWidth:0 }}>
             <div style={{ padding: 18, borderBottom: divider }}>
               <div style={{ fontWeight: 950, color: textPrimary }}>Trends</div>
               <div style={{ color: textMuted, fontWeight: 650, marginTop: 2 }}>Last 12M</div>
             </div>
 
             <div style={{ padding: 18 }}>
-              <div style={{ ...subPanel, padding: 14 }}>
+              <div style={{ ...subPanel, padding: 14, minWidth:0 }}>
                 <TrendsPanel
                   title="Trends"
                   name="Unemployment Rate"
@@ -164,6 +169,7 @@ export default function Page() {
               </div>
             </div>
           </div>
+        </div>
         </div>
 
         {/* LOWER GRID */}

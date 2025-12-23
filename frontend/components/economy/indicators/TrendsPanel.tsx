@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -30,60 +30,72 @@ export default function TrendsPanel({
   const down = delta.includes("↓") || delta.includes("-");
   const up = delta.includes("↑") || delta.includes("+");
 
+  // ✅ Prevent Recharts measuring 0x0 during HMR/first paint
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const textPrimary = "rgba(255,255,255,0.92)";
   const textMuted = "rgba(255,255,255,0.62)";
   const border = "1px solid rgba(255,255,255,0.10)";
   const divider = "1px solid rgba(255,255,255,0.08)";
 
-  // Regime-style dark glass card
-  const card: React.CSSProperties = {
-    borderRadius: 16,
-    padding: 16,
-    border,
-    background: "rgba(255,255,255,0.04)",
-    boxShadow: "0 14px 40px rgba(0,0,0,0.35)",
-    backdropFilter: "blur(12px)",
-    WebkitBackdropFilter: "blur(12px)",
-    overflow: "hidden",
-    height: "100%",
-  };
+  const card: React.CSSProperties = useMemo(
+    () => ({
+      borderRadius: 16,
+      padding: 16,
+      border,
+      background: "rgba(255,255,255,0.04)",
+      boxShadow: "0 14px 40px rgba(0,0,0,0.35)",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+      overflow: "hidden",
+      minWidth: 0,
+    }),
+    []
+  );
 
-  // Correlations-style “smoky” chart panel (transparent-gray)
-  const chartPanel: React.CSSProperties = {
-    borderRadius: 12,
-    border: "1px solid rgba(255,255,255,0.10)",
-    background:
-      "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%)",
-    boxShadow: "0 16px 40px rgba(0,0,0,0.35)",
-    backdropFilter: "blur(14px)",
-    WebkitBackdropFilter: "blur(14px)",
-    overflow: "hidden",
-  };
+  const chartPanel: React.CSSProperties = useMemo(
+    () => ({
+      borderRadius: 12,
+      border: "1px solid rgba(255,255,255,0.10)",
+      background:
+        "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%)",
+      boxShadow: "0 16px 40px rgba(0,0,0,0.35)",
+      backdropFilter: "blur(14px)",
+      WebkitBackdropFilter: "blur(14px)",
+      overflow: "hidden",
+      minWidth: 0,
+    }),
+    []
+  );
 
-  const deltaChip: React.CSSProperties = {
-    display: "inline-flex",
-    alignItems: "center",
-    padding: "4px 10px",
-    borderRadius: 999,
-    fontWeight: 900,
-    fontSize: 12,
-    whiteSpace: "nowrap",
-    border: up
-      ? "1px solid rgba(34,197,94,0.28)"
-      : down
-      ? "1px solid rgba(239,68,68,0.28)"
-      : "1px solid rgba(255,255,255,0.18)",
-    background: up
-      ? "rgba(34,197,94,0.10)"
-      : down
-      ? "rgba(239,68,68,0.10)"
-      : "rgba(255,255,255,0.06)",
-    color: up
-      ? "rgba(187,247,208,0.92)"
-      : down
-      ? "rgba(254,202,202,0.92)"
-      : "rgba(255,255,255,0.75)",
-  };
+  const deltaChip: React.CSSProperties = useMemo(
+    () => ({
+      display: "inline-flex",
+      alignItems: "center",
+      padding: "4px 10px",
+      borderRadius: 999,
+      fontWeight: 900,
+      fontSize: 12,
+      whiteSpace: "nowrap",
+      border: up
+        ? "1px solid rgba(34,197,94,0.28)"
+        : down
+        ? "1px solid rgba(239,68,68,0.28)"
+        : "1px solid rgba(255,255,255,0.18)",
+      background: up
+        ? "rgba(34,197,94,0.10)"
+        : down
+        ? "rgba(239,68,68,0.10)"
+        : "rgba(255,255,255,0.06)",
+      color: up
+        ? "rgba(187,247,208,0.92)"
+        : down
+        ? "rgba(254,202,202,0.92)"
+        : "rgba(255,255,255,0.75)",
+    }),
+    [up, down]
+  );
 
   return (
     <div style={card}>
@@ -114,54 +126,56 @@ export default function TrendsPanel({
       </div>
 
       {/* Chart */}
-      <div style={{ marginTop: 12, height: 220, minWidth: 0, padding: 12, ...chartPanel }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 8, right: 10, left: 0, bottom: 6 }}>
-            <CartesianGrid stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
-            <XAxis
-              dataKey="t"
-              tickMargin={8}
-              tick={{ fill: "rgba(255,255,255,0.55)", fontSize: 12, fontWeight: 700 }}
-              axisLine={{ stroke: "rgba(255,255,255,0.10)" }}
-              tickLine={{ stroke: "rgba(255,255,255,0.10)" }}
-            />
-            <YAxis
-              tickMargin={8}
-              domain={["auto", "auto"]}
-              tick={{ fill: "rgba(255,255,255,0.55)", fontSize: 12, fontWeight: 700 }}
-              axisLine={{ stroke: "rgba(255,255,255,0.10)" }}
-              tickLine={{ stroke: "rgba(255,255,255,0.10)" }}
-            />
-
-            <Tooltip
-              contentStyle={{
-                background: "rgba(15,15,15,0.85)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                borderRadius: 10,
-                color: "rgba(255,255,255,0.9)",
-                boxShadow: "0 18px 40px rgba(0,0,0,0.45)",
-              }}
-              labelStyle={{ color: "rgba(255,255,255,0.7)", fontWeight: 800 }}
-              itemStyle={{ color: "rgba(255,255,255,0.9)", fontWeight: 800 }}
-              cursor={{ stroke: "rgba(255,255,255,0.10)" }}
-            />
-
-            <ReferenceLine
-              y={data[data.length - 1]?.v}
-              stroke="rgba(255,255,255,0.35)"
-              strokeDasharray="4 4"
-            />
-
-            <Area
-              type="monotone"
-              dataKey="v"
-              stroke="rgba(124,139,255,0.90)"
-              strokeWidth={2.4}
-              fill="rgba(124,139,255,0.18)"
-              dot={false}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+      <div style={{ marginTop: 12, minWidth: 0, padding: 12, ...chartPanel }}>
+        {mounted ? (
+          <ResponsiveContainer width="100%" aspect={2.2} minWidth={0} minHeight={0}>
+            <AreaChart data={data} margin={{ top: 8, right: 10, left: 0, bottom: 6 }}>
+              <CartesianGrid stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
+              <XAxis
+                dataKey="t"
+                tickMargin={8}
+                tick={{ fill: "rgba(255,255,255,0.55)", fontSize: 12, fontWeight: 700 }}
+                axisLine={{ stroke: "rgba(255,255,255,0.10)" }}
+                tickLine={{ stroke: "rgba(255,255,255,0.10)" }}
+              />
+              <YAxis
+                tickMargin={8}
+                domain={["auto", "auto"]}
+                tick={{ fill: "rgba(255,255,255,0.55)", fontSize: 12, fontWeight: 700 }}
+                axisLine={{ stroke: "rgba(255,255,255,0.10)" }}
+                tickLine={{ stroke: "rgba(255,255,255,0.10)" }}
+              />
+              <Tooltip
+                contentStyle={{
+                  background: "rgba(15,15,15,0.85)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  borderRadius: 10,
+                  color: "rgba(255,255,255,0.9)",
+                  boxShadow: "0 18px 40px rgba(0,0,0,0.45)",
+                }}
+                labelStyle={{ color: "rgba(255,255,255,0.7)", fontWeight: 800 }}
+                itemStyle={{ color: "rgba(255,255,255,0.9)", fontWeight: 800 }}
+                cursor={{ stroke: "rgba(255,255,255,0.10)" }}
+              />
+              <ReferenceLine
+                y={data[data.length - 1]?.v}
+                stroke="rgba(255,255,255,0.35)"
+                strokeDasharray="4 4"
+              />
+              <Area
+                type="monotone"
+                dataKey="v"
+                stroke="rgba(124,139,255,0.90)"
+                strokeWidth={2.4}
+                fill="rgba(124,139,255,0.18)"
+                dot={false}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        ) : (
+          // small skeleton so layout doesn't jump
+          <div style={{ height: 220 }} />
+        )}
       </div>
     </div>
   );
