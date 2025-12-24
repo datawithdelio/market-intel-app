@@ -25,3 +25,8 @@ logs/
 .vscode/
 .idea/
 
+.env
+backend/.env
+frontend/.env*
+
+

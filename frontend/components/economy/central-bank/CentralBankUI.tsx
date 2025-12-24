@@ -1,8 +1,57 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+type CentralBankResponse = {
+  policyRate: number;
+  stance: string;
+  asOfDate: string;   // date of the FRED observation
+  fetchedAt: string; // date when backend fetched it
+};
+
+// IMPORTANT:
+// - If your backend runs on 4000, keep 4000.
+// - If your backend runs on 8000, change to 8000.
+const BACKEND_URL = "http://localhost:4000";
 
 export default function CentralBankUI() {
+  const [data, setData] = useState<CentralBankResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        setError(null);
+
+        const res = await fetch(`${BACKEND_URL}/api/economy/central-bank`, {
+          cache: "no-store",
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const json = (await res.json()) as CentralBankResponse;
+        if (!cancelled) setData(json);
+      } catch (e: any) {
+        if (!cancelled) setError(e?.message ?? "Failed to fetch");
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const rateText =
+    data?.policyRate != null ? `${data.policyRate.toFixed(2)}%` : "—";
+
+   const stanceText = data?.stance ?? "—";
+   const asOfDateText = data?.asOfDate ?? "—";
+    const fetchedAtText = data?.fetchedAt ?? "—";
+    const lastUpdatedText = fetchedAtText;
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
       {/* TOP SUMMARY */}
@@ -18,12 +67,20 @@ export default function CentralBankUI() {
           <div style={{ fontWeight: 900, fontSize: 14, opacity: 0.7 }}>
             🇺🇸 Federal Reserve (Fed)
           </div>
+
           <div style={{ fontSize: 40, fontWeight: 950, marginTop: 8 }}>
-            5.50%
+            {rateText}
           </div>
+
           <div style={{ opacity: 0.65, fontWeight: 700 }}>
-            Next Meeting: June 12, 2024
+           As of (FRED): {asOfDateText} • Fetched: {fetchedAtText}
           </div>
+
+          {error && (
+            <div style={{ marginTop: 10, fontWeight: 800, opacity: 0.85 }}>
+              Error: {error}
+            </div>
+          )}
         </div>
 
         {/* Stance */}
@@ -31,18 +88,18 @@ export default function CentralBankUI() {
           <div style={{ fontWeight: 900, fontSize: 14, opacity: 0.7 }}>
             Policy Stance Score
           </div>
+
           <div style={{ fontSize: 22, fontWeight: 900, marginTop: 10 }}>
-            Mildly Hawkish
+            {stanceText}
           </div>
 
-          {/* Gauge */}
+          {/* Gauge (still mock for now) */}
           <div
             style={{
               marginTop: 14,
               height: 10,
               borderRadius: 6,
-              background:
-                "linear-gradient(90deg,#d9534f,#f0ad4e,#5cb85c)",
+              background: "linear-gradient(90deg,#d9534f,#f0ad4e,#5cb85c)",
               position: "relative",
             }}
           >
@@ -115,7 +172,7 @@ export default function CentralBankUI() {
           <div style={badge}>Rate Forecasts</div>
           <div style={mockChart} />
           <div style={{ fontWeight: 800, marginTop: 6 }}>
-            Rate-end: <strong>5.50%</strong>
+            Rate-end: <strong>{rateText}</strong>
           </div>
           <span style={link}>View Details →</span>
         </div>
@@ -194,7 +251,8 @@ function Mandate({ label, value }: { label: string; value?: string }) {
 function Decision({ date }: { date: string }) {
   return (
     <div style={{ marginTop: 8, fontSize: 13, fontWeight: 700 }}>
-      Hold — 5.50% <span style={{ opacity: 0.6 }}>{date}</span>
+      Hold — {/** keep this mock for now */}5.50%{" "}
+      <span style={{ opacity: 0.6 }}>{date}</span>
     </div>
   );
 }
