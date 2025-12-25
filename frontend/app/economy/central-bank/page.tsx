@@ -1,4 +1,4 @@
-import CentralBankUI from "../../../components/economy/central-bank/CentralBankUI";
+import CentralBankUI from "@/components/economy/central-bank/CentralBankUI";
 
 export default function CentralBankPage() {
   return (
