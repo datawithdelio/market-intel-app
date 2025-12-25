@@ -1,7 +1,6 @@
-const router = require("express").Router();
-const { getIndicators } = require("../../controllers/economy.controller");
+const express = require("express");
+const router = express.Router();
 
-// GET /api/economy/indicators
-router.get("/indicators", getIndicators);
+router.use("/", require("../../api/economy/centralBank")); // ✅ exposes /central-bank
 
 module.exports = router;

@@ -1,5 +1,9 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
 
-router.use("/economy", require("./economy"));
+// Central Bank routes
+router.use("/economy", require("../api/economy"));
+// Regime routes
+router.use("/economy", require("../api/economy/regime"));
 
 module.exports = router;

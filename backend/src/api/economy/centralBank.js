@@ -5,14 +5,12 @@ function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
-router.get("/central-bank", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const FRED_API_KEY = process.env.FRED_API_KEY;
 
     if (!FRED_API_KEY) {
-      return res
-        .status(500)
-        .json({ error: "Missing FRED_API_KEY in backend/.env" });
+      return res.status(500).json({ error: "Missing FRED_API_KEY in backend/.env" });
     }
 
     const seriesId = "FEDFUNDS";
