@@ -9,5 +9,7 @@ router.use("/regime", require("./regime"));
 router.use("/regime/history", require("./regimeHistory"));
 // News routes
 router.use("/news", require("./news"));
+// Calendar routes
+router.use("/calendar", require("./calendar"));
 
 module.exports = router;
