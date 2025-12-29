@@ -1,9 +1,23 @@
+// backend/src/services/economy/centralBankTimeline.service.js
+
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
 }
+
 function iso(d) {
   return d.toISOString().slice(0, 10);
 }
+
+function ymd(d) {
+  return d.toISOString().slice(0, 10);
+}
+
+function addDaysISO(isoDate, days) {
+  const d = new Date(isoDate + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + days);
+  return ymd(d);
+}
+
 function impactFromImportance(importance) {
   const n = Number(importance);
   if (n >= 3) return "High";
@@ -22,23 +36,73 @@ async function fetchLatestFedFundsRate() {
 
   const res = await fetch(url);
   if (!res.ok) throw new Error(`FRED FEDFUNDS error: ${res.status}`);
+
   const json = await res.json();
   const obs = json?.observations?.[0];
+
   return {
     policyRate: obs?.value != null ? Number(obs.value) : null,
     asOfDate: obs?.date || null,
   };
 }
 
-async function fetchUSCentralBankTimeline({ days = 90 } = {}) {
+// Official FOMC meeting schedule (two-day meetings)
+const FOMC_SCHEDULE = [
+  // 2026
+  { start: "2026-01-27", sep: false },
+  { start: "2026-03-17", sep: true },
+  { start: "2026-04-28", sep: false },
+  { start: "2026-06-16", sep: true },
+  { start: "2026-07-28", sep: false },
+  { start: "2026-09-15", sep: true },
+  { start: "2026-10-27", sep: false },
+  { start: "2026-12-08", sep: true },
+
+  // 2027
+  { start: "2027-01-26", sep: false },
+  { start: "2027-03-16", sep: true },
+  { start: "2027-04-27", sep: false },
+  { start: "2027-06-08", sep: true },
+  { start: "2027-07-27", sep: false },
+  { start: "2027-09-14", sep: true },
+  { start: "2027-10-26", sep: false },
+  { start: "2027-12-07", sep: true },
+];
+
+function buildFomcTimelineItems(from, to) {
+  const fromISO = ymd(from);
+  const toISO = ymd(to);
+
+  return FOMC_SCHEDULE
+    .filter((m) => m.start >= fromISO && m.start <= toISO)
+    .map((m) => {
+      const end = addDaysISO(m.start, 1); // two-day meeting
+      return {
+        date: `${m.start}T14:00:00Z`, // placeholder time
+        title: `FOMC Meeting (${m.start}–${end})${m.sep ? " + SEP" : ""}`,
+        impact: "High",
+        actual: null,
+        forecast: null,
+        previous: null,
+        source: "Federal Reserve (FOMC calendar)",
+        sourceURL: "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+        url: null,
+      };
+    });
+}
+
+async function fetchUSCentralBankTimeline({ days = 180 } = {}) {
   const creds = process.env.TE_CREDENTIALS || "guest:guest";
 
-  const d = clamp(Number(days) || 90, 7, 365);
-  const from = new Date();
-  const to = new Date();
-  to.setDate(to.getDate() + d);
+  const d = clamp(Number(days) || 180, 30, 365);
 
-  // TradingEconomics calendar (real); we’ll filter to US + rate/central-bank keywords
+  // Pull BOTH past and future so the page always has "Recent Decisions"
+  const from = new Date();
+  from.setDate(from.getDate() - Math.floor(d / 2));
+
+  const to = new Date();
+  to.setDate(to.getDate() + Math.ceil(d / 2));
+
   const url =
     `https://api.tradingeconomics.com/calendar` +
     `?c=${encodeURIComponent(creds)}` +
@@ -59,17 +123,27 @@ async function fetchUSCentralBankTimeline({ days = 90 } = {}) {
   const isCB = (x) => {
     const e = String(x?.Event || "").toLowerCase();
     const c = String(x?.Category || "").toLowerCase();
+
     return (
       e.includes("interest rate") ||
-      e.includes("fed") ||
+      e.includes("rate decision") ||
+      e.includes("policy rate") ||
       e.includes("fomc") ||
+      e.includes("fed") ||
+      e.includes("powell") ||
       e.includes("monetary") ||
+      e.includes("minutes") ||
+      e.includes("press conference") ||
+      e.includes("statement") ||
+      (e.includes("rate") && (e.includes("decision") || e.includes("meeting") || e.includes("vote"))) ||
       c.includes("interest rate") ||
-      c.includes("central bank")
+      c.includes("central bank") ||
+      c.includes("rates") ||
+      c.includes("money")
     );
   };
 
-  const timeline = items
+  const teTimeline = items
     .filter(isCB)
     .map((x) => ({
       date: x?.Date || null,
@@ -81,10 +155,12 @@ async function fetchUSCentralBankTimeline({ days = 90 } = {}) {
       source: x?.Source ?? null,
       sourceURL: x?.SourceURL ?? null,
       url: x?.URL ?? null,
-    }))
-    .sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0));
+    }));
 
   const fed = await fetchLatestFedFundsRate();
+  const fomcItems = buildFomcTimelineItems(from, to);
+
+  const merged = [...timeline, ...fomcItems].sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0));
 
   return {
     meta: {
@@ -96,7 +172,7 @@ async function fetchUSCentralBankTimeline({ days = 90 } = {}) {
     },
     policyRate: fed.policyRate,
     policyRateAsOf: fed.asOfDate,
-    timeline,
+    timeline: merged, 
   };
 }
 

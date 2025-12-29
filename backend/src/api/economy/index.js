@@ -4,7 +4,7 @@ const router = express.Router();
 // Central Bank routes
 router.use("/central-bank", require("./centralBank"));
 // Central Bank Timeline routes
-router.use("/central-bank/timeline", require("./centralBankTimeline"));
+router.use("/central-bank", require("./centralBankTimeline"));
 // Regime routes
 router.use("/regime", require("./regime"));
 // Regime History routes
