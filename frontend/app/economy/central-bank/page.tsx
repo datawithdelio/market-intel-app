@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { shareLink } from "@/lib/actions";
+import { usePathname } from "next/navigation";
 
 type TimelineItem = {
   date: string | null;
@@ -30,7 +32,8 @@ type Payload = {
 const glass: React.CSSProperties = {
   borderRadius: 18,
   border: "1px solid rgba(255,255,255,0.18)",
-  background: "linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.10))",
+  background:
+    "linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.10))",
   boxShadow: "0 18px 50px rgba(0,0,0,0.28)",
   backdropFilter: "blur(16px)",
   WebkitBackdropFilter: "blur(16px)",
@@ -47,6 +50,7 @@ const pill: React.CSSProperties = {
   color: "rgba(255,255,255,0.85)",
   fontWeight: 800,
   fontSize: 12,
+  cursor: "pointer",
 };
 
 const rowItem: React.CSSProperties = {
@@ -72,20 +76,29 @@ function normalizeImpact(x: string | null) {
   if (v.includes("med")) return "Medium";
   return "Low";
 }
+
 function stars(impact: string) {
   if (impact === "High") return "★★★";
   if (impact === "Medium") return "★★";
   return "★";
 }
+
 function valueOrDash(v: any) {
   if (v === null || v === undefined || v === "") return "—";
   return String(v);
 }
+
 function fmtDateTime(dateStr: string | null) {
   if (!dateStr) return "";
   const d = new Date(dateStr.replace(" ", "T"));
   if (Number.isNaN(d.getTime())) return dateStr;
-  return d.toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  return d.toLocaleString([], {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 
 function stanceFromRate(r: number | null) {
@@ -96,8 +109,12 @@ function stanceFromRate(r: number | null) {
 }
 
 export default function Page() {
+  const pathname = usePathname();
+
   const [days, setDays] = useState<number>(180);
-  const [impactFilter, setImpactFilter] = useState<"All" | "High" | "Medium" | "Low">("All");
+  const [impactFilter, setImpactFilter] = useState<
+    "All" | "High" | "Medium" | "Low"
+  >("All");
 
   const [data, setData] = useState<Payload | null>(null);
   const [loading, setLoading] = useState(false);
@@ -110,7 +127,8 @@ export default function Page() {
       const url = `${apiBase()}/api/economy/central-bank/timeline?economy=US&days=${days}`;
       const res = await fetch(url, { cache: "no-store" });
       const json = await res.json().catch(() => null);
-      if (!res.ok) throw new Error(json?.error || `Central bank fetch failed: ${res.status}`);
+      if (!res.ok)
+        throw new Error(json?.error || `Central bank fetch failed: ${res.status}`);
       setData(json);
     } catch (e: any) {
       setErr(e?.message || "Failed to load central bank timeline");
@@ -120,31 +138,52 @@ export default function Page() {
     }
   }
 
+  async function onShare() {
+    try {
+      const url = `${window.location.origin}${pathname}`;
+      await shareLink(url, "Central Bank");
+      alert("Link copied!");
+    } catch {
+      alert("Could not share/copy link.");
+    }
+  }
+
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [days]);
 
   const filtered = useMemo(() => {
-    const items = (data?.timeline || []).map((x) => ({ ...x, impactNorm: normalizeImpact(x.impact) }));
-    const out =
-      impactFilter === "All" ? items : items.filter((x) => x.impactNorm === impactFilter);
+    const items = (data?.timeline || []).map((x) => ({
+      ...x,
+      impactNorm: normalizeImpact(x.impact),
+    }));
 
-    out.sort((a, b) => new Date(a.date || 0).getTime() - new Date(b.date || 0).getTime());
+    const out =
+      impactFilter === "All"
+        ? items
+        : items.filter((x: any) => x.impactNorm === impactFilter);
+
+    out.sort(
+      (a: any, b: any) =>
+        new Date(a.date || 0).getTime() - new Date(b.date || 0).getTime()
+    );
     return out;
   }, [data, impactFilter]);
 
   const upcoming = useMemo(() => {
     const now = Date.now();
-    return filtered.filter((x) => {
-      const t = new Date((x.date || "").replace(" ", "T")).getTime();
-      return Number.isFinite(t) && t >= now;
-    }).slice(0, 12);
+    return filtered
+      .filter((x: any) => {
+        const t = new Date((x.date || "").replace(" ", "T")).getTime();
+        return Number.isFinite(t) && t >= now;
+      })
+      .slice(0, 12);
   }, [filtered]);
 
   const recent = useMemo(() => {
     const now = Date.now();
-    const past = filtered.filter((x) => {
+    const past = filtered.filter((x: any) => {
       const t = new Date((x.date || "").replace(" ", "T")).getTime();
       return Number.isFinite(t) && t < now;
     });
@@ -154,12 +193,28 @@ export default function Page() {
   const stance = stanceFromRate(data?.policyRate ?? null);
 
   return (
-    <div style={{ minHeight: "100vh", margin: -24, padding: 24, color: "rgba(255,255,255,0.92)" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        margin: -24,
+        padding: 24,
+        color: "rgba(255,255,255,0.92)",
+      }}
+    >
       <div style={{ maxWidth: 1300, margin: "0 auto" }}>
         {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 16,
+          }}
+        >
           <div>
-            <h1 style={{ fontSize: 48, margin: "0 0 6px", letterSpacing: -0.5 }}>Central Bank</h1>
+            <h1 style={{ fontSize: 48, margin: "0 0 6px", letterSpacing: -0.5 }}>
+              Central Bank
+            </h1>
             <div style={{ color: "rgba(255,255,255,0.65)", fontWeight: 600 }}>
               Policy rate + upcoming decisions and rate-related events.
             </div>
@@ -168,15 +223,35 @@ export default function Page() {
               <button style={pill} onClick={load} disabled={loading}>
                 ↻ {loading ? "Loading..." : "Refresh"}
               </button>
-              <button style={pill}>⤴ Share</button>
+
+              <button style={pill} onClick={onShare}>
+                ⤴ Share
+              </button>
             </div>
 
             {err && (
-              <div style={{ marginTop: 10, color: "rgba(255,120,120,0.95)", fontWeight: 800 }}>{err}</div>
+              <div
+                style={{
+                  marginTop: 10,
+                  color: "rgba(255,120,120,0.95)",
+                  fontWeight: 800,
+                }}
+              >
+                {err}
+              </div>
             )}
+
             {!err && data?.meta?.fetchedAt && (
-              <div style={{ marginTop: 10, color: "rgba(255,255,255,0.55)", fontWeight: 700, fontSize: 12 }}>
-                Source: {data.meta.source} · Updated: {new Date(data.meta.fetchedAt).toLocaleString()}
+              <div
+                style={{
+                  marginTop: 10,
+                  color: "rgba(255,255,255,0.55)",
+                  fontWeight: 700,
+                  fontSize: 12,
+                }}
+              >
+                Source: {data.meta.source} · Updated:{" "}
+                {new Date(data.meta.fetchedAt).toLocaleString()}
               </div>
             )}
           </div>
@@ -185,7 +260,7 @@ export default function Page() {
             <select
               value={String(days)}
               onChange={(e) => setDays(Number(e.target.value))}
-              style={{ ...pill, appearance: "none", cursor: "pointer" }}
+              style={{ ...pill, appearance: "none" }}
               title="How far ahead"
             >
               <option value="90">Next 90 days</option>
@@ -196,7 +271,7 @@ export default function Page() {
             <select
               value={impactFilter}
               onChange={(e) => setImpactFilter(e.target.value as any)}
-              style={{ ...pill, appearance: "none", cursor: "pointer" }}
+              style={{ ...pill, appearance: "none" }}
               title="Impact filter"
             >
               <option value="All">⚡ All Impact</option>
@@ -211,7 +286,9 @@ export default function Page() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 18 }}>
           {/* Policy card */}
           <div style={{ ...glass, padding: 16, minHeight: 220 }}>
-            <div style={{ fontWeight: 900, marginBottom: 12 }}>Policy Snapshot (US)</div>
+            <div style={{ fontWeight: 900, marginBottom: 12 }}>
+              Policy Snapshot (US)
+            </div>
 
             <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
               <div style={{ fontSize: 42, fontWeight: 1000 }}>
@@ -229,7 +306,14 @@ export default function Page() {
             <div style={{ marginTop: 14, ...rowItem }}>
               <div>
                 <div style={{ fontWeight: 1000 }}>{stance.label}</div>
-                <div style={{ fontSize: 12, fontWeight: 750, color: "rgba(255,255,255,0.65)", marginTop: 2 }}>
+                <div
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 750,
+                    color: "rgba(255,255,255,0.65)",
+                    marginTop: 2,
+                  }}
+                >
                   {stance.hint}
                 </div>
               </div>
@@ -258,26 +342,35 @@ export default function Page() {
                 </div>
               )}
 
-              {!loading && upcoming.map((x, idx) => (
-                <div key={`${x.date}-${idx}`} style={rowItem}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <div style={{ fontWeight: 900 }}>{x.title || "Central bank event"}</div>
-                    <div style={{ fontSize: 12, fontWeight: 750, color: "rgba(255,255,255,0.65)" }}>
-                      {fmtDateTime(x.date)} · Impact: <span style={{ fontWeight: 900 }}>{x.impactNorm}</span>
+              {!loading &&
+                upcoming.map((x: any, idx: number) => (
+                  <div key={`${x.date}-${idx}`} style={rowItem}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                      <div style={{ fontWeight: 900 }}>
+                        {x.title || "Central bank event"}
+                      </div>
+                      <div style={{ fontSize: 12, fontWeight: 750, color: "rgba(255,255,255,0.65)" }}>
+                        {fmtDateTime(x.date)} · Impact:{" "}
+                        <span style={{ fontWeight: 900 }}>{x.impactNorm}</span>
+                      </div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.70)" }}>
+                        Forecast: {valueOrDash(x.forecast)} · Previous:{" "}
+                        {valueOrDash(x.previous)}
+                      </div>
                     </div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.70)" }}>
-                      Forecast: {valueOrDash(x.forecast)} · Previous: {valueOrDash(x.previous)}
+                    <div style={{ fontWeight: 900, opacity: 0.85 }}>
+                      {stars(x.impactNorm)}
                     </div>
                   </div>
-                  <div style={{ fontWeight: 900, opacity: 0.85 }}>{stars(x.impactNorm)}</div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
 
           {/* Recent */}
           <div style={{ ...glass, padding: 16, minHeight: 320, gridColumn: "1 / -1" }}>
-            <div style={{ fontWeight: 900, marginBottom: 12 }}>Recent Decisions / Releases</div>
+            <div style={{ fontWeight: 900, marginBottom: 12 }}>
+              Recent Decisions / Releases
+            </div>
 
             <div style={{ display: "grid", gap: 10 }}>
               {!loading && recent.length === 0 && (
@@ -286,20 +379,28 @@ export default function Page() {
                 </div>
               )}
 
-              {!loading && recent.map((x, idx) => (
-                <div key={`${x.date}-${idx}`} style={rowItem}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <div style={{ fontWeight: 900 }}>{x.title || "Central bank event"}</div>
-                    <div style={{ fontSize: 12, fontWeight: 750, color: "rgba(255,255,255,0.65)" }}>
-                      {fmtDateTime(x.date)} · Impact: <span style={{ fontWeight: 900 }}>{x.impactNorm}</span>
+              {!loading &&
+                recent.map((x: any, idx: number) => (
+                  <div key={`${x.date}-${idx}`} style={rowItem}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                      <div style={{ fontWeight: 900 }}>
+                        {x.title || "Central bank event"}
+                      </div>
+                      <div style={{ fontSize: 12, fontWeight: 750, color: "rgba(255,255,255,0.65)" }}>
+                        {fmtDateTime(x.date)} · Impact:{" "}
+                        <span style={{ fontWeight: 900 }}>{x.impactNorm}</span>
+                      </div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.70)" }}>
+                        Actual: {valueOrDash(x.actual)} · Forecast:{" "}
+                        {valueOrDash(x.forecast)} · Previous:{" "}
+                        {valueOrDash(x.previous)}
+                      </div>
                     </div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.70)" }}>
-                      Actual: {valueOrDash(x.actual)} · Forecast: {valueOrDash(x.forecast)} · Previous: {valueOrDash(x.previous)}
+                    <div style={{ fontWeight: 900, opacity: 0.85 }}>
+                      {stars(x.impactNorm)}
                     </div>
                   </div>
-                  <div style={{ fontWeight: 900, opacity: 0.85 }}>{stars(x.impactNorm)}</div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>

@@ -12,6 +12,7 @@ app.use(cors({ origin: origins.length ? origins : true }));
 app.use(express.json());
 
 app.get("/health", (req, res) => res.json({ ok: true }));
+app.use("/api/fx", require("./api/fx/frankfurter.routes"));
 
 app.use("/api", require("./routes"));
 
